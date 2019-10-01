@@ -1,2 +1,3 @@
 # sonoTron
 Teensy 3.6 based Vocoder
+### This project is in an early feasibility study. Please be patient ...
