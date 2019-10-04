@@ -15,4 +15,4 @@ The project uses the Teensy Audio Library to implement the audio components like
 
 The hardware used is very similar to https://github.com/ErikDorstel/octoTron . The only difference is the additional use of two line in ports.
 
-The sonoTron Vocoder use a MIDI In port to control all vocoder parameters. The assigned MIDI controller numbers are part of the documentation.
+The sonoTron Vocoder use a MIDI In port to control all vocoder parameters. The assigned MIDI controller numbers and the schematic are part of the documentation.
