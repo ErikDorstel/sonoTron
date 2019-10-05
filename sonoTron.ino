@@ -277,7 +277,7 @@ void MIDIsetControl(byte channel, byte control, byte value) {
   if (control==18) { vco2.amplitude(fvalue); }
   if (control==19) { vco3.amplitude(fvalue); }
   if (control==20) { vco4.amplitude(fvalue); }
-  if (control==24) { lfo.frequency(fvalue*100); }
+  if (control==24) { lfo.frequency(lvalue*1000); }
   if (control==25) { vco1.frequency(lvalue*5000); }
   if (control==26) { vco2.frequency(lvalue*5000); }
   if (control==27) { vco3.frequency(lvalue*5000); }
