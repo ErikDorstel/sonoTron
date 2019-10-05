@@ -4,11 +4,11 @@ Teensy 3.6 based Vocoder with MIDI Control
 The Vocoder has the following characteristics:
 * 16 bands with logarithmic distribution
 * cascaded filters with 24dB/octave
-* MIDI adjustable bottom and top frequencies for the modulator and the carrier path
+* MIDI controlled bottom and top frequencies for the modulator and the carrier path
 * line in for the modulator and the carrier path
 * pink and white noise for the modulator and the carrier path
-* MIDI adjustable envelope speed and envelope limiter
-* MIDI adjustable filter resonance
+* MIDI controlled envelope speed and envelope limiter
+* MIDI controlled filter resonance
 * one MIDI input for a MIDI controller like https://github.com/ErikDorstel/midiKnobs
 
 The project uses the Teensy Audio Library to implement the audio components like filter, peak measurement ... . This graphic shows the connections of the components used.
