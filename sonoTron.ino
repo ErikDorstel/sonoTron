@@ -228,7 +228,7 @@ void loop() {
     Serial.print(" Output: "); Serial.print(peak3.read()); Serial.println(""); logUtil(); } }
 
 void MIDIsetControl(byte channel, byte control, byte value) {
-  float fvalue, lvalue; fvalue=float(value)/127; lvalue=pow(fvalue,3);
+  float fvalue=float(value)/127; float lvalue=pow(fvalue,3);
   if (control==0) { modulatorButtom=(lvalue*4950)+50; setModulatorFrequency(modulatorButtom,modulatorTop); }
   if (control==1) { modulatorTop=(lvalue*4950)+50; setModulatorFrequency(modulatorButtom,modulatorTop); }
   if (control==2) { carrierButtom=(lvalue*4950)+50; setCarrierFrequency(carrierButtom,carrierTop); }
@@ -262,6 +262,7 @@ void MIDIsetControl(byte channel, byte control, byte value) {
     if ((value&96)==32) { vco4.begin(WAVEFORM_SAWTOOTH); }
     if ((value&96)==64) { vco4.begin(WAVEFORM_SQUARE); }
     if ((value&96)==96) { vco4.begin(WAVEFORM_TRIANGLE); } }
+  if (control==13) { vco1.frequencyModulation((fvalue*11)+1); vco2.frequencyModulation((fvalue*11)+1); vco3.frequencyModulation((fvalue*11)+1); vco4.frequencyModulation((fvalue*11)+1); }
   if (control==14) {
     if ((value&96)==0) { setModulatorSource(1,0,0,0); }
     if ((value&96)==32) { setModulatorSource(0,1,0,0); }
