@@ -7,7 +7,7 @@ The Vocoder has the following characteristics:
 * MIDI controlled bottom and top frequencies for the modulator and the carrier path
 * line in for the modulator and the carrier path
 * pink and white noise for the modulator and the carrier path
-* four VCO with one LFO for the modulator and the carrier path
+* four VCO with two LFO for the modulator and the carrier path
 * MIDI controlled envelope speed, envelope limiter, filter resonance, vco and lfo parameters
 * one MIDI input for a MIDI controller like https://github.com/ErikDorstel/midiKnobs
 
