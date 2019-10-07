@@ -7,14 +7,20 @@ AudioInputI2S            i2sin;
 AudioOutputI2S           i2sout;
 AudioSynthNoiseWhite     noise;
 AudioSynthNoisePink      pink;
-AudioSynthWaveform       lfo;
+AudioSynthWaveform       lfo1;
+AudioSynthWaveform       lfo2;
 AudioSynthWaveformModulated vco1;
 AudioSynthWaveformModulated vco2;
 AudioSynthWaveformModulated vco3;
 AudioSynthWaveformModulated vco4;
-AudioMixer4              mixermodulator;
-AudioMixer4              mixercarrier;
 AudioMixer4              mixervco;
+AudioMixer4              mixercarrier;
+AudioMixer4              mixermodulator;
+AudioMixer4              mixer1;
+AudioMixer4              mixer2;
+AudioMixer4              mixer3;
+AudioMixer4              mixer4;
+AudioMixer4              mixer14;
 AudioAnalyzePeak         peak1;
 AudioAnalyzePeak         peak2;
 AudioAnalyzePeak         peak3;
@@ -23,21 +29,16 @@ AudioFilterStateVariable filter11[17];
 AudioFilterStateVariable filter12[17];
 AudioFilterStateVariable filter21[17];
 AudioFilterStateVariable filter22[17];
-AudioMixer4              mixer1;
-AudioMixer4              mixer2;
-AudioMixer4              mixer3;
-AudioMixer4              mixer4;
-AudioMixer4              mixer14;
 AudioConnection          patchCord1(noise, 0, mixercarrier, 1);
 AudioConnection          patchCord2(noise, 0, mixermodulator, 1);
 AudioConnection          patchCord3(i2sin, 0, mixermodulator, 0);
 AudioConnection          patchCord4(i2sin, 1, mixercarrier, 0);
-AudioConnection          patchCord5(lfo, 0, vco1, 0);
-AudioConnection          patchCord6(lfo, 0, vco2, 0);
-AudioConnection          patchCord7(lfo, 0, vco3, 0);
-AudioConnection          patchCord8(lfo, 0, vco4, 0);
-AudioConnection          patchCord9(pink, 0, mixercarrier, 2);
-AudioConnection          patchCord10(pink, 0, mixermodulator, 2);
+AudioConnection          patchCord5(pink, 0, mixercarrier, 2);
+AudioConnection          patchCord6(pink, 0, mixermodulator, 2);
+AudioConnection          patchCord7(lfo1, 0, vco1, 0);
+AudioConnection          patchCord8(lfo1, 0, vco2, 0);
+AudioConnection          patchCord9(lfo2, 0, vco3, 0);
+AudioConnection          patchCord10(lfo2, 0, vco4, 0);
 AudioConnection          patchCord11(vco4, 0, mixervco, 3);
 AudioConnection          patchCord12(vco2, 0, mixervco, 1);
 AudioConnection          patchCord13(vco3, 0, mixervco, 2);
@@ -171,7 +172,8 @@ void setup() {
   setFilterResonance(5);
   setOutputAmplifier(2);
   setMixerVCO(0.25,0.25,0.25,0.25);
-  setLFO(1,100,WAVEFORM_SINE);
+  setLFO1(1,100,WAVEFORM_SINE);
+  setLFO2(1,100,WAVEFORM_SINE);
   setVCO1(1,300,WAVEFORM_SAWTOOTH,1);
   setVCO2(1,300,WAVEFORM_SAWTOOTH,1);
   setVCO3(1,300,WAVEFORM_SAWTOOTH,1);
@@ -238,31 +240,35 @@ void MIDIsetControl(byte channel, byte control, byte value) {
   if (control==6) { setFilterResonance((fvalue*4.3)+0.7); }
   if (control==7) { setOutputAmplifier(lvalue*10); }
   if (control==8) {
-    if ((value&96)==0) { lfo.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { lfo.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { lfo.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { lfo.begin(WAVEFORM_TRIANGLE); } }
+    if ((value&96)==0) { lfo1.begin(WAVEFORM_SINE); }
+    if ((value&96)==32) { lfo1.begin(WAVEFORM_SAWTOOTH); }
+    if ((value&96)==64) { lfo1.begin(WAVEFORM_SQUARE); }
+    if ((value&96)==96) { lfo1.begin(WAVEFORM_TRIANGLE); } }
   if (control==9) {
+    if ((value&96)==0) { lfo2.begin(WAVEFORM_SINE); }
+    if ((value&96)==32) { lfo2.begin(WAVEFORM_SAWTOOTH); }
+    if ((value&96)==64) { lfo2.begin(WAVEFORM_SQUARE); }
+    if ((value&96)==96) { lfo2.begin(WAVEFORM_TRIANGLE); } }
+  if (control==10) {
     if ((value&96)==0) { vco1.begin(WAVEFORM_SINE); }
     if ((value&96)==32) { vco1.begin(WAVEFORM_SAWTOOTH); }
     if ((value&96)==64) { vco1.begin(WAVEFORM_SQUARE); }
     if ((value&96)==96) { vco1.begin(WAVEFORM_TRIANGLE); } }
-  if (control==10) {
+  if (control==11) {
     if ((value&96)==0) { vco2.begin(WAVEFORM_SINE); }
     if ((value&96)==32) { vco2.begin(WAVEFORM_SAWTOOTH); }
     if ((value&96)==64) { vco2.begin(WAVEFORM_SQUARE); }
     if ((value&96)==96) { vco2.begin(WAVEFORM_TRIANGLE); } }
-  if (control==11) {
+  if (control==12) {
     if ((value&96)==0) { vco3.begin(WAVEFORM_SINE); }
     if ((value&96)==32) { vco3.begin(WAVEFORM_SAWTOOTH); }
     if ((value&96)==64) { vco3.begin(WAVEFORM_SQUARE); }
     if ((value&96)==96) { vco3.begin(WAVEFORM_TRIANGLE); } }
-  if (control==12) {
+  if (control==13) {
     if ((value&96)==0) { vco4.begin(WAVEFORM_SINE); }
     if ((value&96)==32) { vco4.begin(WAVEFORM_SAWTOOTH); }
     if ((value&96)==64) { vco4.begin(WAVEFORM_SQUARE); }
     if ((value&96)==96) { vco4.begin(WAVEFORM_TRIANGLE); } }
-  if (control==13) { vco1.frequencyModulation((fvalue*11)+1); vco2.frequencyModulation((fvalue*11)+1); vco3.frequencyModulation((fvalue*11)+1); vco4.frequencyModulation((fvalue*11)+1); }
   if (control==14) {
     if ((value&96)==0) { setModulatorSource(1,0,0,0); }
     if ((value&96)==32) { setModulatorSource(0,1,0,0); }
@@ -273,16 +279,20 @@ void MIDIsetControl(byte channel, byte control, byte value) {
     if ((value&96)==32) { setCarrierSource(0,1,0,0); }
     if ((value&96)==64) { setCarrierSource(0,0,1,0); }
     if ((value&96)==96) { setCarrierSource(0,0,0,1); } }
-  if (control==16) { lfo.amplitude(fvalue); }
-  if (control==17) { vco1.amplitude(fvalue); }
-  if (control==18) { vco2.amplitude(fvalue); }
-  if (control==19) { vco3.amplitude(fvalue); }
-  if (control==20) { vco4.amplitude(fvalue); }
-  if (control==24) { lfo.frequency(lvalue*1000); }
-  if (control==25) { vco1.frequency(lvalue*5000); }
-  if (control==26) { vco2.frequency(lvalue*5000); }
-  if (control==27) { vco3.frequency(lvalue*5000); }
-  if (control==28) { vco4.frequency(lvalue*5000); } }
+  if (control==16) { lfo1.amplitude(fvalue); }
+  if (control==17) { lfo2.amplitude(fvalue); }
+  if (control==18) { vco1.amplitude(fvalue); }
+  if (control==19) { vco2.amplitude(fvalue); }
+  if (control==20) { vco3.amplitude(fvalue); }
+  if (control==21) { vco4.amplitude(fvalue); }
+  if (control==22) { vco1.frequencyModulation((fvalue*11)+1); vco2.frequencyModulation((fvalue*11)+1); }
+  if (control==23) { vco3.frequencyModulation((fvalue*11)+1); vco4.frequencyModulation((fvalue*11)+1); }
+  if (control==24) { lfo1.frequency(lvalue*1000); }
+  if (control==25) { lfo2.frequency(lvalue*1000); }
+  if (control==26) { vco1.frequency(lvalue*5000); }
+  if (control==27) { vco2.frequency(lvalue*5000); }
+  if (control==28) { vco3.frequency(lvalue*5000); }
+  if (control==29) { vco4.frequency(lvalue*5000); } }
 
 void setFilterResonance(float r) { for (byte c=1;c<=16;c++) { filter11[c].resonance(r); filter12[c].resonance(r); filter21[c].resonance(r); filter22[c].resonance(r); } }
 
@@ -302,7 +312,8 @@ void setVCO1(float a, float f, byte w, byte o) { vco1.begin(a,f,w); vco1.frequen
 void setVCO2(float a, float f, byte w, byte o) { vco2.begin(a,f,w); vco2.frequencyModulation(o); }
 void setVCO3(float a, float f, byte w, byte o) { vco3.begin(a,f,w); vco3.frequencyModulation(o); }
 void setVCO4(float a, float f, byte w, byte o) { vco4.begin(a,f,w); vco4.frequencyModulation(o); }
-void setLFO(float a, float f, byte w) { lfo.begin(a,f,w); }
+void setLFO1(float a, float f, byte w) { lfo1.begin(a,f,w); }
+void setLFO2(float a, float f, byte w) { lfo2.begin(a,f,w); }
 
 void logUtil() {
   Serial.print("Memory: "); Serial.print(AudioMemoryUsage()); Serial.print("/"); Serial.print(AudioMemoryUsageMax());
