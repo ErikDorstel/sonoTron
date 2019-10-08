@@ -154,7 +154,7 @@ AudioControlSGTL5000     sgtl5000_1;
 
 Metro timer = Metro(1000);
 float modulatorLevel[17], carrierGain[17];
-float envelopeSpeed=0.996, envelopeLimit=0.1;
+float envelopeSpeed=0.995, envelopeLimit=0.1;
 float modulatorButtom=50, modulatorTop=5000, carrierButtom=50, carrierTop=5000;
 
 void setup() {
@@ -231,68 +231,69 @@ void loop() {
 
 void MIDIsetControl(byte channel, byte control, byte value) {
   float fvalue=float(value)/127; float lvalue=pow(fvalue,3);
-  if (control==0) { modulatorButtom=(lvalue*4950)+50; setModulatorFrequency(modulatorButtom,modulatorTop); }
-  if (control==1) { modulatorTop=(lvalue*4950)+50; setModulatorFrequency(modulatorButtom,modulatorTop); }
-  if (control==2) { carrierButtom=(lvalue*4950)+50; setCarrierFrequency(carrierButtom,carrierTop); }
-  if (control==3) { carrierTop=(lvalue*4950)+50; setCarrierFrequency(carrierButtom,carrierTop); }
-  if (control==4) { envelopeSpeed=((fvalue/2)+0.4996); }
-  if (control==5) { envelopeLimit=fvalue; }
-  if (control==6) { setFilterResonance((fvalue*4.3)+0.7); }
-  if (control==7) { setOutputAmplifier(lvalue*10); }
-  if (control==8) {
-    if ((value&96)==0) { lfo1.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { lfo1.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { lfo1.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { lfo1.begin(WAVEFORM_TRIANGLE); } }
-  if (control==9) {
-    if ((value&96)==0) { lfo2.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { lfo2.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { lfo2.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { lfo2.begin(WAVEFORM_TRIANGLE); } }
-  if (control==10) {
-    if ((value&96)==0) { vco1.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { vco1.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { vco1.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { vco1.begin(WAVEFORM_TRIANGLE); } }
-  if (control==11) {
-    if ((value&96)==0) { vco2.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { vco2.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { vco2.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { vco2.begin(WAVEFORM_TRIANGLE); } }
-  if (control==12) {
-    if ((value&96)==0) { vco3.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { vco3.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { vco3.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { vco3.begin(WAVEFORM_TRIANGLE); } }
-  if (control==13) {
-    if ((value&96)==0) { vco4.begin(WAVEFORM_SINE); }
-    if ((value&96)==32) { vco4.begin(WAVEFORM_SAWTOOTH); }
-    if ((value&96)==64) { vco4.begin(WAVEFORM_SQUARE); }
-    if ((value&96)==96) { vco4.begin(WAVEFORM_TRIANGLE); } }
-  if (control==14) {
-    if ((value&96)==0) { setModulatorSource(1,0,0,0); }
-    if ((value&96)==32) { setModulatorSource(0,1,0,0); }
-    if ((value&96)==64) { setModulatorSource(0,0,1,0); }
-    if ((value&96)==96) { setModulatorSource(0,0,0,1); } }
-  if (control==15) {
-    if ((value&96)==0) { setCarrierSource(1,0,0,0); }
-    if ((value&96)==32) { setCarrierSource(0,1,0,0); }
-    if ((value&96)==64) { setCarrierSource(0,0,1,0); }
-    if ((value&96)==96) { setCarrierSource(0,0,0,1); } }
-  if (control==16) { lfo1.amplitude(fvalue); }
-  if (control==17) { lfo2.amplitude(fvalue); }
-  if (control==18) { vco1.amplitude(fvalue); }
-  if (control==19) { vco2.amplitude(fvalue); }
-  if (control==20) { vco3.amplitude(fvalue); }
-  if (control==21) { vco4.amplitude(fvalue); }
-  if (control==22) { vco1.frequencyModulation((fvalue*11)+1); vco2.frequencyModulation((fvalue*11)+1); }
-  if (control==23) { vco3.frequencyModulation((fvalue*11)+1); vco4.frequencyModulation((fvalue*11)+1); }
-  if (control==24) { lfo1.frequency(lvalue*1000); }
-  if (control==25) { lfo2.frequency(lvalue*1000); }
-  if (control==26) { vco1.frequency(lvalue*5000); }
-  if (control==27) { vco2.frequency(lvalue*5000); }
-  if (control==28) { vco3.frequency(lvalue*5000); }
-  if (control==29) { vco4.frequency(lvalue*5000); } }
+  switch (control) {
+    case 0: modulatorButtom=(lvalue*4950)+50; setModulatorFrequency(modulatorButtom,modulatorTop); break;
+    case 1: modulatorTop=(lvalue*4950)+50; setModulatorFrequency(modulatorButtom,modulatorTop); break;
+    case 2: carrierButtom=(lvalue*4950)+50; setCarrierFrequency(carrierButtom,carrierTop); break;
+    case 3: carrierTop=(lvalue*4950)+50; setCarrierFrequency(carrierButtom,carrierTop); break;
+    case 4: envelopeSpeed=((fvalue/2)+0.495); break;
+    case 5: envelopeLimit=fvalue; break;
+    case 6: setFilterResonance((fvalue*4.3)+0.7); break;
+    case 7: setOutputAmplifier(lvalue*10); break;
+    case 8: switch (value&96) {
+      case 0: lfo1.begin(WAVEFORM_SINE); break;
+      case 32: lfo1.begin(WAVEFORM_SAWTOOTH); break;
+      case 64: lfo1.begin(WAVEFORM_SQUARE); break;
+      case 96: lfo1.begin(WAVEFORM_TRIANGLE); break; } break;
+    case 9: switch (value&96) {
+      case 0: lfo2.begin(WAVEFORM_SINE); break;
+      case 32: lfo2.begin(WAVEFORM_SAWTOOTH); break;
+      case 64: lfo2.begin(WAVEFORM_SQUARE); break;
+      case 96: lfo2.begin(WAVEFORM_TRIANGLE); break; } break;
+    case 10: switch (value&96) {
+      case 0: vco1.begin(WAVEFORM_SINE); break;
+      case 32: vco1.begin(WAVEFORM_SAWTOOTH); break;
+      case 64: vco1.begin(WAVEFORM_SQUARE); break;
+      case 96: vco1.begin(WAVEFORM_TRIANGLE); break; } break;
+    case 11: switch (value&96) {
+      case 0: vco2.begin(WAVEFORM_SINE); break;
+      case 32: vco2.begin(WAVEFORM_SAWTOOTH); break;
+      case 64: vco2.begin(WAVEFORM_SQUARE); break;
+      case 96: vco2.begin(WAVEFORM_TRIANGLE); break; } break;
+    case 12: switch (value&96) {
+      case 0: vco3.begin(WAVEFORM_SINE); break;
+      case 32: vco3.begin(WAVEFORM_SAWTOOTH); break;
+      case 64: vco3.begin(WAVEFORM_SQUARE); break;
+      case 96: vco3.begin(WAVEFORM_TRIANGLE); break; } break;
+    case 13: switch (value&96) {
+      case 0: vco4.begin(WAVEFORM_SINE); break;
+      case 32: vco4.begin(WAVEFORM_SAWTOOTH); break;
+      case 64: vco4.begin(WAVEFORM_SQUARE); break;
+      case 96: vco4.begin(WAVEFORM_TRIANGLE); break; } break;
+    case 14: switch (value&96) {
+      case 0: setModulatorSource(1,0,0,0); break;
+      case 32: setModulatorSource(0,1,0,0); break;
+      case 64: setModulatorSource(0,0,1,0); break;
+      case 96: setModulatorSource(0,0,0,1); break; } break;
+    case 15: switch (value&96) {
+      case 0: setCarrierSource(1,0,0,0); break;
+      case 32: setCarrierSource(0,1,0,0); break;
+      case 64: setCarrierSource(0,0,1,0); break;
+      case 96: setCarrierSource(0,0,0,1); break; } break;
+    case 16: lfo1.amplitude(fvalue); break;
+    case 17: lfo2.amplitude(fvalue); break;
+    case 18: vco1.amplitude(fvalue); break;
+    case 19: vco2.amplitude(fvalue); break;
+    case 20: vco3.amplitude(fvalue); break;
+    case 21: vco4.amplitude(fvalue); break;
+    case 22: vco1.frequencyModulation((fvalue*11)+1); vco2.frequencyModulation((fvalue*11)+1); break;
+    case 23: vco3.frequencyModulation((fvalue*11)+1); vco4.frequencyModulation((fvalue*11)+1); break;
+    case 24: lfo1.frequency(lvalue*1000); break;
+    case 25: lfo2.frequency(lvalue*1000); break;
+    case 26: vco1.frequency(lvalue*5000); break;
+    case 27: vco2.frequency(lvalue*5000); break;
+    case 28: vco3.frequency(lvalue*5000); break;
+    case 29: vco4.frequency(lvalue*5000); break; } }
 
 void setFilterResonance(float r) { for (byte c=1;c<=16;c++) { filter11[c].resonance(r); filter12[c].resonance(r); filter21[c].resonance(r); filter22[c].resonance(r); } }
 
